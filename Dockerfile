@@ -17,8 +17,11 @@ RUN dotnet publish "WebAPI.csproj" -c Release -o /app/publish /p:UseAppHost=fals
 # Use the runtime image for the final stage
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
+
+
+# Render uses dynamic PORT, expose common ports
 EXPOSE 8080
-EXPOSE 8081
+ENV ASPNETCORE_URLS=http://+:8080
 
 # Copy the published app
 COPY --from=publish /app/publish .

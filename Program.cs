@@ -31,10 +31,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddControllers();
 
-// IMPORTANT: Configure port for Render
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
 var app = builder.Build();
 
 app.UseSwagger();
@@ -43,13 +39,9 @@ app.UseSwaggerUI();
 // Redirect root ("/") to Swagger UI ??
 app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
 
-// Add before app.MapControllers();
-app.MapGet("/", () => "API is running!");
-app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
-
 // Configure the HTTP request pipeline.
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
